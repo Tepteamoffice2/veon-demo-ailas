@@ -1,0 +1,57 @@
+---
+import FutureLink from "./FutureLink.astro";
+import { phone, address, licence, legalName, socials } from "../data/clinic";
+---
+<footer class="site-footer" data-rec="R-109">
+  <div class="container site-footer__grid">
+    <div class="site-footer__brand">
+      <p class="site-footer__name">{legalName}</p>
+      <p class="muted">{address.full}</p>
+      <p class="muted">{licence}</p>
+    </div>
+    <div class="site-footer__col">
+      <a class="site-footer__phone num" href={phone.href}>{phone.display}</a>
+      <p class="muted">{phone.hours}</p>
+    </div>
+    <ul class="site-footer__col site-footer__links">
+      <li><FutureLink note="Розділ у розробці">Новини</FutureLink></li>
+      <li><FutureLink note="Розділ у розробці">Корисне</FutureLink></li>
+      <li><FutureLink note="Розділ у розробці">Юридичні документи</FutureLink></li>
+      <li><FutureLink note="Розділ у розробці">Політика конфіденційності</FutureLink></li>
+    </ul>
+    <div class="site-footer__col">
+      <ul class="site-footer__social">
+        {socials.map((s) => (
+          <li><a class="site-footer__link" href={s.href} rel="noopener" target="_blank">{s.name}<span class="visually-hidden"> (відкриється в новій вкладці)</span></a></li>
+        ))}
+      </ul>
+      <p class="site-footer__lang">
+        <span class="lang-current" aria-current="true">УКР</span>
+        <FutureLink note="Розділ у розробці">РУС</FutureLink>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer { padding-block: var(--s-8) var(--s-9); font-size: var(--fs-small); line-height: var(--lh-small); border-top: var(--line) solid var(--color-border); }
+  .site-footer__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-6); }
+  .site-footer__brand, .site-footer__col { display: grid; gap: var(--s-1); align-content: start; justify-items: start; }
+  .site-footer__name { font-weight: 600; font-size: var(--fs-body); }
+  .site-footer__phone { font-size: var(--fs-body); font-weight: 500; min-height: var(--tap); display: inline-flex; align-items: center; text-decoration: none; }
+  .site-footer__phone:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+  .site-footer__social { display: flex; flex-wrap: wrap; column-gap: var(--s-4); }
+  .site-footer__link { display: inline-flex; align-items: center; min-height: var(--tap); text-decoration: underline; text-underline-offset: 0.22em; }
+  .site-footer__link:hover { text-decoration-thickness: 2px; }
+  .site-footer__link:active, .site-footer__phone:active { color: var(--color-text-muted); }
+  .site-footer__lang { display: flex; align-items: center; gap: var(--s-4); }
+  .lang-current { font-weight: 600; }
+
+  @media (min-width: 768px) {
+    .site-footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gutter); }
+  }
+  @media (min-width: 1280px) {
+    .site-footer { padding-bottom: var(--s-8); }
+    .site-footer__grid { grid-template-columns: minmax(0, 4fr) minmax(0, 2fr) minmax(0, 3fr) minmax(0, 3fr); }
+  }
+</style>

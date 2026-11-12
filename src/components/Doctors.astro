@@ -1,0 +1,68 @@
+---
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import { leaders, doctors } from "../data/clinic";
+---
+<Section id="doctors" class="docs" rec="R-107,S-R017,S-R-MA03">
+  <div class="container docs__grid">
+    <div class="docs__aside">
+      <h2 class="t-section">Хто лікує</h2>
+      <p class="docs__fact t-lede">5 кандидатів медичних наук, 2 консультанти міжнародного рівня і 9 лікарів вищої категорії, за даними клініки.</p>
+      <p class="muted">Двоє фахівців мають експертний статус компаній Paragon і STAAR.</p>
+    </div>
+
+    <div class="docs__main">
+      <h3 class="visually-hidden">Керівництво клініки</h3>
+      <ul class="leaders">
+        {leaders.map((l, i) => (
+          <li class="leader" data-reveal style={`--reveal-delay:${i * 60}ms`}>
+            <p class="leader__role t-small muted">{l.role}</p>
+            <p class="leader__name t-title">{l.name}</p>
+            <p class="leader__rank">{l.rank}</p>
+          </li>
+        ))}
+      </ul>
+
+      <h3 class="docs__sub">Серед лікарів центру</h3>
+      <ul class="team">
+        {doctors.map((d) => (
+          <li class="team__item">
+            <span class="team__name">{d.name}</span>
+            {d.note && <span class="team__note t-small muted">{d.note}</span>}
+          </li>
+        ))}
+      </ul>
+      <FutureLink note="Розділ у розробці">Усі лікарі</FutureLink>
+    </div>
+  </div>
+</Section>
+
+<style>
+  :global(.docs) { padding-block: var(--section-xl) var(--section-l); }
+  .docs__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-7); }
+  .docs__aside { display: grid; gap: var(--s-4); align-content: start; }
+  .docs__fact { max-width: 30ch; }
+
+  .leaders { display: grid; }
+  .leader { display: grid; gap: var(--s-1); padding-block: var(--s-5); border-top: var(--line) solid var(--color-border); }
+  .leader:first-child { border-top: 2px solid var(--color-text); }
+  .leader__name { font-family: var(--font-display); font-weight: 500; }
+  .leader__rank { max-width: 40ch; }
+
+  .docs__sub { font-family: var(--font-body); font-size: var(--fs-body); font-weight: 600; margin: var(--s-7) 0 var(--s-4); }
+  .team { display: grid; gap: 0 var(--gutter); margin-bottom: var(--s-4); }
+  .team__item { display: grid; gap: 0; padding-block: var(--s-3); border-top: var(--line) solid var(--color-border); }
+  .team__name { font-weight: 500; }
+
+  @media (min-width: 768px) {
+    .team { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1280px) {
+    .docs__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .docs__aside { grid-column: 1 / 5; position: sticky; top: calc(var(--header-h) + var(--s-7)); align-self: start; }
+    .docs__main { grid-column: 6 / -1; }
+    .leader { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); column-gap: var(--gutter); align-items: baseline; }
+    .leader__role { grid-column: 1 / -1; }
+    .team { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  }
+</style>

@@ -1,0 +1,134 @@
+---
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import { priceGroups, phone } from "../data/clinic";
+---
+<Section id="prices" class="prices" rec="R-106,R-101,S-R016,S-R-MA03">
+  <div class="container prices__inner">
+    <div class="prices__head">
+      <h2 class="t-section">Ключові ціни</h2>
+      <p class="prices__note t-lede">Ціни довідкові, у гривнях. Точна вартість — після обстеження.</p>
+    </div>
+
+    <div class="prices__tabs" data-tabs>
+      <div class="prices__tablist" role="tablist" aria-label="Напрямок">
+        {priceGroups.map((g, i) => (
+          <button type="button" role="tab" id={`tab-${g.id}`} aria-controls={`panel-${g.id}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1} class="prices__tab">{g.tab}</button>
+        ))}
+      </div>
+
+      {priceGroups.map((g) => (
+        <div class="prices__panel" role="tabpanel" id={`panel-${g.id}`} aria-labelledby={`tab-${g.id}`} tabindex="0">
+          <h3 class="prices__panel-title t-title">{g.heading}</h3>
+          <ul class="prices__items">
+            {g.items.map((it) => (
+              <li class="price">
+                <span class="price__value num">{it.value}<span class="price__cur"> грн</span></span>
+                <span class="price__label">{it.label}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <div class="prices__foot">
+      <a class="disc-s" href={phone.href} data-call-cta>
+        <span class="disc-s__label">Подзвонити</span>
+        <span class="disc-s__num num">{phone.display}</span>
+      </a>
+      <div class="prices__foot-text">
+        <p>Подзвоніть: реєстратор запише на обстеження й погодить день і час.</p>
+        <p class="t-small on-dark-muted">{phone.hours}</p>
+        <FutureLink note="Розділ у розробці" class="future-link--dark">Повний прайс</FutureLink>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  :global(.prices) { background: var(--color-text); color: var(--color-on-dark); padding-block: var(--section-l); }
+  :global(.prices) :focus-visible { outline-color: var(--color-focus-on-dark); }
+  .prices__head { display: grid; gap: var(--s-4); margin-bottom: var(--s-7); }
+  .prices__note { color: var(--color-on-dark); max-width: 34ch; }
+  .on-dark-muted { color: var(--color-on-dark-muted); }
+
+  .prices__tablist { display: none; }
+  .prices__panel + .prices__panel { margin-top: var(--s-8); }
+  .prices__panel:focus-visible { outline-offset: var(--s-2); }
+  .prices__panel-title { margin-bottom: var(--s-5); color: var(--color-on-dark); }
+
+  /* Enhanced (JS): a real tab switcher */
+  .prices__tabs.is-enhanced .prices__tablist {
+    display: flex; flex-wrap: nowrap; gap: var(--s-5);
+    overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    margin-bottom: var(--s-7);
+    border-bottom: var(--line) solid var(--color-dark-line);
+  }
+  .prices__tabs.is-enhanced .prices__panel + .prices__panel { margin-top: 0; }
+  .prices__tablist::-webkit-scrollbar { display: none; }
+  .prices__tab {
+    position: relative; flex: none; white-space: nowrap;
+    min-height: var(--tap); padding: var(--s-2) 0;
+    background: none; border: 0; cursor: pointer;
+    color: var(--color-on-dark-muted); font-size: var(--fs-body); font-weight: 500;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .prices__tab::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px;
+    background: var(--color-accent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform var(--dur-mid) var(--ease-out);
+  }
+  .prices__tab:hover { color: var(--color-on-dark); }
+  .prices__tab:active { color: var(--color-on-dark-muted); }
+  .prices__tab[aria-selected="true"] { color: var(--color-on-dark); }
+  .prices__tab[aria-selected="true"]::after { transform: scaleX(1); }
+
+  .prices__items { display: grid; gap: var(--s-6); }
+  .price { display: grid; gap: var(--s-2); border-top: var(--line) solid var(--color-dark-line); padding-top: var(--s-4); }
+  .price__value { font-size: var(--fs-display); line-height: 1; font-weight: 400; letter-spacing: -0.01em; white-space: nowrap; }
+  .price__cur { font-size: var(--fs-lede); letter-spacing: 0; }
+  .price__label { color: var(--color-on-dark-muted); max-width: 32ch; }
+
+  /* Motion 3 — panel change: crossfade + figures rise 8px */
+  .prices__panel.is-entering { animation: panel-in 280ms var(--ease-out); }
+  .prices__panel.is-entering .price__value { animation: value-in 280ms var(--ease-out); }
+  @keyframes panel-in { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes value-in { from { transform: translateY(8px); } to { transform: translateY(0); } }
+
+  .prices__foot { display: grid; gap: var(--s-6); margin-top: var(--s-8); align-items: center; }
+  .prices__foot-text { display: grid; gap: var(--s-2); justify-items: start; max-width: 44ch; }
+  .disc-s {
+    display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 0 var(--s-3);
+    min-height: var(--tap-l); padding: var(--s-3) var(--s-5);
+    border-radius: var(--radius-pill);
+    background: var(--color-accent); color: var(--color-accent-ink);
+    text-decoration: none;
+    box-shadow: 0 0 0 0 var(--color-on-dark);
+    transition: box-shadow var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+  }
+  .disc-s:hover { box-shadow: 0 0 0 3px var(--color-on-dark); }
+  .disc-s:active { transform: scale(.98); }
+  .disc-s__label { font-weight: 600; }
+  .disc-s__num { white-space: nowrap; font-size: var(--fs-small); }
+
+  :global(.future-link--dark) { color: var(--color-on-dark-muted); }
+  :global(.future-link--dark:hover), :global(.future-link--dark:focus-visible) { color: var(--color-on-dark); }
+  :global(.future-link--dark .future-link__note) { background: var(--color-on-dark); color: var(--color-text); }
+
+  @media (min-width: 768px) {
+    .prices__head { grid-template-columns: repeat(8, minmax(0, 1fr)); column-gap: var(--gutter); align-items: end; }
+    .prices__head h2 { grid-column: 1 / 5; text-wrap: balance; }
+    .prices__note { grid-column: 5 / -1; }
+    .prices__items { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .prices__foot { grid-template-columns: auto minmax(0, 1fr); column-gap: var(--s-7); }
+    .disc-s { width: var(--disc-s); height: var(--disc-s); min-height: 0; border-radius: 50%; flex-direction: column; text-align: center; }
+  }
+  @media (min-width: 1280px) {
+    .prices__head { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+    .prices__head h2 { grid-column: 1 / 7; text-wrap: balance; }
+    .prices__note { grid-column: 8 / -1; }
+    .prices__items { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
+</style>

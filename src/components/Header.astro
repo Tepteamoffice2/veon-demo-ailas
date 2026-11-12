@@ -1,0 +1,134 @@
+---
+import FutureLink from "./FutureLink.astro";
+import { nav, phone } from "../data/clinic";
+---
+<header class="site-header" data-header>
+  <div class="container site-header__bar">
+    <a class="site-header__logo" href="#top" aria-label="АЙЛАЗ — на початок сторінки">
+      <picture>
+        <source srcset="/img/ailas-logo.webp" type="image/webp" />
+        <img src="/img/ailas-logo.png" width="186" height="53" alt="АЙЛАЗ" fetchpriority="high" />
+      </picture>
+    </a>
+
+    <nav class="site-nav" id="site-nav" aria-label="Розділи сторінки" data-rec="R-106">
+      <ul class="site-nav__list">
+        {nav.map((item) => (
+          <li><a class="site-nav__link" href={item.href}>{item.label}</a></li>
+        ))}
+      </ul>
+      <div class="site-nav__lang site-nav__lang--panel">
+        <span class="lang-current" aria-current="true">УКР</span>
+        <FutureLink note="Розділ у розробці">РУС</FutureLink>
+      </div>
+    </nav>
+
+    <div class="site-header__contact" data-rec="R-101">
+      <a class="site-header__phone num" href={phone.href}>{phone.display}</a>
+      <span class="site-header__hours t-small muted">{phone.hours}</span>
+    </div>
+
+    <div class="site-nav__lang site-nav__lang--bar">
+      <span class="lang-current" aria-current="true">УКР</span>
+      <FutureLink note="Розділ у розробці">РУС</FutureLink>
+    </div>
+
+    <a class="call-pill call-pill--ghost site-header__call" href={phone.href} data-rec="R-103">Подзвонити</a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle data-rec="R-103">
+      <span class="menu-toggle__icon" aria-hidden="true"><span></span><span></span></span>
+      <span class="menu-toggle__label">Меню</span>
+    </button>
+  </div>
+</header>
+
+<style is:global>
+  /* Menu panel (phones and tablets). Hidden only once scripting runs (.js on <html>). */
+  @media (max-width: 1279px) {
+    .js .site-nav {
+      position: absolute; left: 0; right: 0; top: 100%;
+      padding: var(--s-2) var(--space) var(--s-6);
+      background: var(--color-bg);
+      border-bottom: var(--line) solid var(--color-border);
+      opacity: 0; visibility: hidden; transform: translateY(-8px);
+      transition: opacity var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out), visibility 0s linear var(--dur-fast);
+    }
+    .js .site-nav.is-open { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+  }
+</style>
+
+<style>
+  .site-header {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--color-bg);
+    border-bottom: var(--line) solid var(--color-border);
+  }
+  .site-header__bar {
+    display: flex; align-items: center; gap: var(--s-3);
+    min-height: var(--header-h);
+  }
+  .site-header__logo { display: inline-flex; flex: none; margin-right: auto; padding-block: var(--s-2); }
+  .site-header__logo img { height: 32px; width: auto; mix-blend-mode: multiply; }
+  .site-header__logo:focus-visible { outline-offset: var(--s-1); }
+
+  .site-nav__list { display: flex; flex-wrap: wrap; column-gap: var(--s-5); }
+  .site-nav__link {
+    display: flex; align-items: center; min-height: var(--tap);
+    font-weight: 500; text-decoration: none;
+    background-image: linear-gradient(var(--color-text), var(--color-text));
+    background-size: 0 2px; background-repeat: no-repeat; background-position: 0 calc(100% - 8px);
+    transition: background-size var(--dur-mid) var(--ease-out);
+  }
+  .site-nav__link:hover { background-size: 100% 2px; }
+  .site-nav__link:active { color: var(--color-text-muted); }
+  .lang-current { font-weight: 600; }
+  .site-nav__lang { display: flex; align-items: center; gap: var(--s-4); font-size: var(--fs-small); }
+
+  .site-header__contact, .site-nav__lang--bar { display: none; }
+  .site-header__call { min-height: var(--tap); padding-inline: var(--s-4); font-size: var(--fs-small); }
+
+  .menu-toggle {
+    display: inline-flex; align-items: center; gap: var(--s-2);
+    min-height: var(--tap); min-width: var(--tap); padding: 0 var(--s-2);
+    background: none; border: 0; border-radius: var(--radius);
+    font-size: var(--fs-small); font-weight: 500; cursor: pointer;
+  }
+  .menu-toggle:hover .menu-toggle__label { text-decoration: underline; text-underline-offset: 0.25em; }
+  .menu-toggle__icon { display: grid; gap: var(--s-1); width: 20px; }
+  .menu-toggle__icon span { display: block; height: 2px; background: var(--color-text); transition: transform var(--dur-fast) var(--ease-out); }
+  .menu-toggle[aria-expanded="true"] .menu-toggle__icon span:first-child { transform: translateY(3px) rotate(45deg); }
+  .menu-toggle[aria-expanded="true"] .menu-toggle__icon span:last-child { transform: translateY(-3px) rotate(-45deg); }
+
+  /* Mobile: without JS the nav is a plain list under the bar; with JS it is a panel behind «Меню». */
+  .site-nav { order: 10; flex-basis: 100%; padding-bottom: var(--s-4); }
+  .site-header__bar { flex-wrap: wrap; }
+  .menu-toggle { display: none; }
+  :global(.js) .menu-toggle { display: inline-flex; }
+  :global(.js) .site-nav__list { flex-direction: column; }
+  :global(.js) .site-nav__link { font-family: var(--font-display); font-size: var(--fs-title); }
+  :global(.js) .site-nav__list li + li { border-top: var(--line) solid var(--color-border); }
+  :global(.js) .site-nav__lang--panel { padding-top: var(--s-4); }
+  :global(html:not(.js)) .site-header { position: static; }
+
+  @media (min-width: 1280px) {
+    .site-header__bar { flex-wrap: nowrap; gap: var(--s-6); }
+    .site-header__logo img { height: 40px; }
+    .site-nav, :global(.js) .site-nav {
+      position: static; order: 0; flex-basis: auto; padding: 0; border: 0; background: none;
+      opacity: 1; visibility: visible; transform: none; transition: none;
+    }
+    .site-nav__list, :global(.js) .site-nav__list { flex-direction: row; flex-wrap: nowrap; gap: var(--s-6); }
+    .site-nav__list li + li, :global(.js) .site-nav__list li + li { border: 0; }
+    .site-nav__link, :global(.js) .site-nav__link { font-family: var(--font-body); font-size: var(--fs-small); }
+    .site-nav__lang--panel, :global(.js) .site-nav__lang--panel { display: none; }
+    .site-header__contact { display: grid; justify-items: end; line-height: 1.2; }
+    .site-header__phone { font-size: var(--fs-price-row); font-weight: 500; text-decoration: none; padding-block: var(--s-1); }
+    .site-header__phone:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.18em; }
+    .site-nav__lang--bar { display: flex; }
+    .site-header__call, .menu-toggle, :global(.js) .menu-toggle { display: none; }
+  }
+  @media (max-width: 359px) {
+    .site-header__logo img { height: 26px; }
+    .site-header__call { padding-inline: var(--s-3); }
+    .menu-toggle__label { display: none; }
+  }
+</style>

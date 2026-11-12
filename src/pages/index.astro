@@ -1,0 +1,57 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Directions from "../components/Directions.astro";
+import Prices from "../components/Prices.astro";
+import Doctors from "../components/Doctors.astro";
+import Clinic from "../components/Clinic.astro";
+import Contacts from "../components/Contacts.astro";
+import Footer from "../components/Footer.astro";
+import StickyCall from "../components/StickyCall.astro";
+
+const title = "Офтальмологічний центр «АЙЛАЗ» у Києві | Корекція зору";
+const description = "Лазерна корекція зору від 14 300 грн за око, операція з катаракти з ІОЛ від 31 100 грн, дитячий зір і лікування хвороб ока. Київ, м. «Почайна», 044 364 10 01.";
+
+// JSON-LD MedicalClinic — only facts from veon/client.json
+const ld = {
+  "@context": "https://schema.org",
+  "@type": "MedicalClinic",
+  name: "АЙЛАЗ",
+  legalName: "ТОВ «АЙЛАЗ»",
+  telephone: "+380443641001",
+  email: "info@ailas.com.ua",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "просп. Степана Бандери, 17/1",
+    addressLocality: "Київ",
+    postalCode: "04073",
+    addressCountry: "UA",
+  },
+  openingHoursSpecification: [{
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    opens: "08:00",
+    closes: "20:00",
+  }],
+  medicalSpecialty: ["Optometric"],
+  sameAs: [
+    "https://www.instagram.com/ailasua/",
+    "https://www.facebook.com/AILASUA/",
+    "https://www.youtube.com/user/AILASCOMUA",
+    "https://www.tiktok.com/@ailasua",
+  ],
+};
+---
+<Base lang="uk" title={title} description={description}>
+  <script slot="head" type="application/ld+json" data-rec="R-205" set:html={JSON.stringify(ld)} />
+  <Header slot="header" />
+  <Hero />
+  <Directions />
+  <Prices />
+  <Doctors />
+  <Clinic />
+  <Contacts />
+  <Footer slot="footer" />
+  <StickyCall slot="footer" />
+</Base>

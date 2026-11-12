@@ -1,0 +1,67 @@
+---
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import { equipment, firsts, makers } from "../data/clinic";
+---
+<Section id="clinic" class="clinic" rec="R-107">
+  <div class="container clinic__grid">
+    <div class="clinic__aside">
+      <h2 class="t-section">Клініка й обладнання</h2>
+      <p class="t-lede muted">Діагностика, лазерна корекція й власний операційний блок за однією адресою: просп. Степана Бандери, 17/1.</p>
+      <FutureLink note="Розділ у розробці">Віртуальний тур клінікою</FutureLink>
+    </div>
+
+    <div class="clinic__main">
+      <ul class="kit">
+        {equipment.map((e, i) => (
+          <li class="kit__item" data-reveal style={`--reveal-delay:${i * 60}ms`}>
+            <span class="kit__name t-title">{e.name}</span>
+            <span class="kit__what">{e.what}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div class="firsts">
+        <h3 class="firsts__title t-title">Першими в Україні</h3>
+        <p class="t-small muted">За даними клініки, АЙЛАЗ першою в Україні запровадила:</p>
+        <ul class="firsts__list">
+          {firsts.map((f) => <li>{f}</li>)}
+        </ul>
+      </div>
+
+      <p class="makers">
+        <span class="makers__lead">Діагностичне обладнання виробників</span>
+        <span class="muted">{makers.join(", ")}.</span>
+      </p>
+    </div>
+  </div>
+</Section>
+
+<style>
+  :global(.clinic) { background: var(--color-surface); padding-block: var(--section-l) var(--section-m); }
+  .clinic__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-7); }
+  .clinic__aside { display: grid; gap: var(--s-4); align-content: start; justify-items: start; }
+  .clinic__aside .t-lede { max-width: 32ch; }
+
+  .kit { display: grid; border-top: 2px solid var(--color-text); }
+  .kit__item { display: grid; gap: var(--s-1); padding-block: var(--s-5); border-bottom: var(--line) solid var(--color-border); }
+  .kit__name { font-family: var(--font-display); font-weight: 500; }
+  .kit__what { color: var(--color-text-muted); }
+
+  .firsts { margin-top: var(--s-8); display: grid; gap: var(--s-3); }
+  .firsts__list { display: grid; gap: 0 var(--gutter); margin-top: var(--s-2); }
+  .firsts__list li { padding-block: var(--s-3); border-top: var(--line) solid var(--color-border); font-weight: 500; }
+
+  .makers { margin-top: var(--s-8); display: grid; gap: var(--s-2); max-width: var(--measure); }
+  .makers__lead { font-weight: 600; }
+
+  @media (min-width: 768px) {
+    .kit__item { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: var(--gutter); align-items: baseline; }
+    .firsts__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 1280px) {
+    .clinic__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .clinic__aside { grid-column: 1 / 5; position: sticky; top: calc(var(--header-h) + var(--s-7)); align-self: start; }
+    .clinic__main { grid-column: 6 / -1; }
+  }
+</style>

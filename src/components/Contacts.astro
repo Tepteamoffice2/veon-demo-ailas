@@ -1,0 +1,90 @@
+---
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import { phone, opticsPhone, email, address, socials } from "../data/clinic";
+---
+<Section id="contacts" class="contacts" rec="R-101,R-105,R-109,S-R014,S-R015,S-R-MA03">
+  <div class="container contacts__grid">
+    <div class="contacts__call">
+      <h2 class="t-section">Запис і контакти</h2>
+      <a class="contacts__phone num" href={phone.href}>{phone.display}</a>
+      <p class="t-lede">{phone.hoursFull}</p>
+      <ol class="steps">
+        <li>Ви телефонуєте в кол-центр.</li>
+        <li>Реєстратор погоджує з вами день і час.</li>
+        <li>Приходите на обстеження.</li>
+      </ol>
+      <FutureLink note="Онлайн-запис з'явиться в повній версії сайту" class="future-link--on-accent">Записатися онлайн</FutureLink>
+    </div>
+
+    <div class="contacts__info">
+      <div class="info">
+        <h3 class="info__title">Адреса</h3>
+        <p>{address.full}</p>
+        <p>{address.metro}</p>
+        <a class="info__link" href={address.map} rel="noopener" target="_blank">Маршрут на мапі<span class="visually-hidden"> (відкриється в новій вкладці)</span></a>
+      </div>
+      <div class="info">
+        <h3 class="info__title">Пошта</h3>
+        <a class="info__link" href={email.href}>{email.display}</a>
+      </div>
+      <div class="info info--optics">
+        <h3 class="info__title">«АЙЛАЗ-Оптика»</h3>
+        <p>Та сама будівля, {address.optics}</p>
+        <a class="info__link num" href={opticsPhone.href}>{opticsPhone.display}</a>
+        <p>{opticsPhone.hours}</p>
+      </div>
+      <div class="info">
+        <h3 class="info__title">Соцмережі</h3>
+        <ul class="socials">
+          {socials.map((s) => (
+            <li><a class="info__link" href={s.href} rel="noopener" target="_blank">{s.name}<span class="visually-hidden"> (відкриється в новій вкладці)</span></a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</Section>
+
+<style>
+  :global(.contacts) {
+    background: var(--color-accent); color: var(--color-accent-ink);
+    padding-block: var(--section-l);
+  }
+  .contacts__grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s-8); }
+  .contacts__call { display: grid; gap: var(--s-4); justify-items: start; align-content: start; }
+  .contacts__phone {
+    font-size: min(var(--fs-display), 10.5vw); line-height: 1.05; font-weight: 400; letter-spacing: -0.01em;
+    text-decoration: none; white-space: nowrap;
+    background-image: linear-gradient(var(--color-accent-ink), var(--color-accent-ink));
+    background-size: 0 3px; background-repeat: no-repeat; background-position: 0 100%;
+    transition: background-size var(--dur-mid) var(--ease-out);
+  }
+  .contacts__phone:hover { background-size: 100% 3px; }
+  .contacts__phone:active { opacity: .8; }
+  .steps { list-style: decimal; padding-left: var(--s-5); display: grid; gap: var(--s-1); margin-block: var(--s-2); }
+
+  .contacts__info { display: grid; gap: var(--s-6); align-content: start; }
+  .info { display: grid; gap: var(--s-1); justify-items: start; padding-top: var(--s-4); border-top: 2px solid var(--color-accent-ink); }
+  .info__title { font-family: var(--font-body); font-size: var(--fs-body); font-weight: 600; }
+  .info__link {
+    display: inline-flex; align-items: center; min-height: var(--tap);
+    font-weight: 500;
+    text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.22em;
+  }
+  .info__link:hover { text-decoration-thickness: 3px; }
+  .info__link:active { opacity: .8; }
+  .socials { display: flex; flex-wrap: wrap; column-gap: var(--s-5); }
+
+  :global(.future-link--on-accent) { color: var(--color-accent-ink); }
+  :global(.future-link--on-accent:hover), :global(.future-link--on-accent:focus-visible) { color: var(--color-accent-ink); text-decoration-style: solid; }
+
+  @media (min-width: 768px) {
+    .contacts__info { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--gutter); }
+  }
+  @media (min-width: 1280px) {
+    .contacts__grid { grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--gutter); }
+    .contacts__call { grid-column: 1 / 8; }
+    .contacts__info { grid-column: 9 / -1; grid-template-columns: minmax(0, 1fr); padding-top: var(--s-4); }
+  }
+</style>

@@ -1,0 +1,37 @@
+---
+import { phone } from "../data/clinic";
+---
+<div class="sticky-call" data-sticky-call aria-hidden="true" data-rec="R-103,R-110">
+  <a class="sticky-call__btn" href={phone.href} tabindex="-1">
+    <span class="sticky-call__dot" aria-hidden="true"></span>
+    Подзвонити <span class="num">{phone.display}</span>
+  </a>
+</div>
+
+<style>
+  .sticky-call { display: none; }
+  @media (max-width: 1279px) {
+    :global(.js) .sticky-call {
+      display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+      padding: var(--s-3) var(--space) calc(var(--s-3) + env(safe-area-inset-bottom, 0px));
+      background: var(--color-bg);
+      border-top: var(--line) solid var(--color-border);
+      transform: translateY(110%);
+      transition: transform 240ms var(--ease-out);
+    }
+    :global(.js) .sticky-call.is-shown { transform: translateY(0); }
+  }
+  .sticky-call__btn {
+    display: flex; align-items: center; justify-content: center; gap: var(--s-3);
+    min-height: var(--tap-l); border-radius: var(--radius-pill);
+    background: var(--color-accent); color: var(--color-accent-ink);
+    font-weight: 600; text-decoration: none; white-space: nowrap;
+    transition: transform var(--dur-fast) var(--ease-out);
+  }
+  .sticky-call__btn:hover { box-shadow: 0 0 0 2px var(--color-text); }
+  .sticky-call__btn:active { transform: scale(.98); }
+  .sticky-call__dot { width: 12px; height: 12px; border-radius: 50%; background: var(--color-accent-ink); }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .sticky-call { transition: none; }
+  }
+</style>

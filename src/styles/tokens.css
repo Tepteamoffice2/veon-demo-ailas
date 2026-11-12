@@ -1,0 +1,91 @@
+/* Hallmark · shape: index-first (typographic rows: patient words, method, price) · genre: editorial · theme: custom · job: book · idea: "One fixation point per screen: the orange dot from the AILAZ logo sits only where the call or the key fact is" · vibe: "daylight exam room, precise, calm, warm graphite"
+ * paper: #FBFBFA · accent: #FF6D00 · display: Piazzolla · body: IBM Plex Sans · hero: typographic H1 over ten columns, one sentence, orange call disc with the number inside, no photo · nav: light 80px bar, logo, five anchors, phone with hours, language · footer: light compact legal strip · imagery: none · signature: the orange fixation disc that always means call
+ * axes: light/roman-serif/warm · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V3 · weakest: V (no client photography), answered with large set names, ranks and device names instead of weak photos */
+/* Hallmark · waive 71 · h3.dir__ask in components/Directions.astro · it is the label of an index row (patient words inside <summary>), not a block heading; the block heading is the h2 «З чим ви прийшли» */
+/* Line 1 of this file is the Hallmark stamp (docs/process/hallmark.md), filled from design/concept.md. */
+/* Client design tokens from design/concept.md (veon-concept: colors, fonts). Breakpoints: 768px (tablet), 1280px (desktop) — literal in media queries. */
+
+/* Metric fallbacks: keep line boxes close to the web fonts while they load (CLS). */
+@font-face { font-family: "Piazzolla Fallback"; src: local("Georgia"); size-adjust: 104%; ascent-override: 92%; descent-override: 26%; line-gap-override: 0%; }
+@font-face { font-family: "Plex Fallback"; src: local("Arial"); size-adjust: 102%; ascent-override: 100%; descent-override: 27%; line-gap-override: 0%; }
+
+:root {
+  /* colour */
+  --color-bg: #FBFBFA;
+  --color-surface: #F1F0EE;
+  --color-text: #1F1B18;
+  --color-text-muted: #57524F;
+  --color-accent: #FF6D00;
+  --color-accent-ink: #1F1B18;   /* text on accent fills, 6.1:1 */
+  --color-accent-text: #B04600;
+  --color-on-dark: #FBFBFA;
+  --color-on-dark-muted: #B9B3AE;
+  --color-border: #D6D5D5;
+  --color-focus: #1F1B18;
+  --color-focus-on-dark: #FBFBFA;
+  --color-dark-line: #4A433E;
+
+  /* type */
+  --font-display: "Piazzolla Variable", "Piazzolla Fallback", Georgia, serif;
+  --font-body: "IBM Plex Sans", "Plex Fallback", Arial, sans-serif;
+  --fs-display: clamp(2.5rem, 1.6rem + 3.9vw, 5.5rem);   /* 40 → 88 */
+  --fs-section: clamp(2rem, 1.55rem + 1.95vw, 3.5rem);    /* 32 → 56 */
+  --fs-title: clamp(1.5rem, 1.28rem + 0.98vw, 2.25rem);   /* 24 → 36 */
+  --fs-lede: clamp(1.125rem, 1.03rem + 0.4vw, 1.375rem);  /* 18 → 22 */
+  --fs-body: clamp(1.0625rem, 1.04rem + 0.1vw, 1.125rem); /* 17 → 18 */
+  --fs-small: 0.9375rem;                                  /* 15 */
+  --fs-price-row: clamp(1.25rem, 1.08rem + 0.7vw, 1.75rem); /* 20 → 28 */
+  --lh-display: 1.04;
+  --lh-section: 1.08;
+  --lh-title: 1.15;
+  --lh-lede: 1.45;
+  --lh-body: 1.6;
+  --lh-small: 1.45;
+  --measure: 66ch;
+
+  /* space (8-point rhythm) */
+  --s-1: 0.25rem;  /* 4 */
+  --s-2: 0.5rem;   /* 8 */
+  --s-3: 0.75rem;  /* 12 */
+  --s-4: 1rem;     /* 16 */
+  --s-5: 1.5rem;   /* 24 */
+  --s-6: 2rem;     /* 32 */
+  --s-7: 3rem;     /* 48 */
+  --s-8: 4rem;     /* 64 */
+  --s-9: 6rem;     /* 96 */
+  --s-10: 8rem;    /* 128 */
+  --s-11: 10rem;   /* 160 */
+  --section-xl: clamp(var(--s-9), 6vw + 3rem, var(--s-11)); /* 96 → 160 */
+  --section-l: clamp(var(--s-8), 5vw + 2rem, var(--s-10));  /* 64 → 128 */
+  --section-m: clamp(var(--s-8), 3vw + 2.5rem, var(--s-9)); /* 64 → 96 */
+  --gutter: var(--s-4);
+
+  /* layout (base names) */
+  --space: 1.25rem;          /* page margin: 20 / 40 / 64 */
+  --container: 1312px;
+  --header-h: 64px;
+  --radius: 4px;
+  --radius-pill: 999px;
+  --tap: 44px;
+  --tap-l: 64px;
+  --disc: 184px;
+  --disc-s: 144px;
+  --dot: 14px;
+  --line: 1px;
+  --ring: 3px;
+
+  /* motion */
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --dur: 520ms;
+  --dur-fast: 200ms;
+  --dur-mid: 260ms;
+  --dur-focus: 700ms;
+}
+
+@media (min-width: 768px) {
+  :root { --space: 2.5rem; --gutter: var(--s-5); }
+}
+@media (min-width: 1280px) {
+  :root { --space: 4rem; --header-h: 80px; }
+}

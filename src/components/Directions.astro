@@ -1,0 +1,135 @@
+---
+import Section from "./Section.astro";
+import FutureLink from "./FutureLink.astro";
+import { directions, phone, opticsPhone } from "../data/clinic";
+---
+<Section id="directions" class="dirs" rec="R-102,R-111">
+  <div class="container">
+    <div class="dirs__head">
+      <h2 class="t-section">З чим ви прийшли</h2>
+      <p class="dirs__intro t-lede muted">Оберіть свою ситуацію: під нею методи, ціна і телефон.</p>
+    </div>
+
+    <div class="dirs__list" data-directions>
+      <span class="dirs__dot" data-dir-dot aria-hidden="true"></span>
+      {directions.map((d) => {
+        const call = d.call === "optics" ? opticsPhone : phone;
+        return (
+          <details class="dir" data-dir id={`dir-${d.id}`}>
+            <summary class="dir__summary">
+              <h3 class="dir__ask t-title">{d.ask}</h3>
+              <span class="dir__term">{d.term}</span>
+              {d.price ? (
+                <span class="dir__price">
+                  <span class="dir__price-value num">{d.price}</span>
+                  <span class="dir__price-note t-small muted">{d.priceNote}</span>
+                </span>
+              ) : (
+                <span class="dir__price">
+                  <span class="dir__price-note t-small muted">{d.call === "optics" ? <>окремий номер <span style="white-space:nowrap">{opticsPhone.display}</span></> : "вартість — після обстеження"}</span>
+                </span>
+              )}
+              <span class="dir__toggle" aria-hidden="true"></span>
+            </summary>
+            <div class="dir__body">
+              <ul class="dir__methods">
+                {d.methods.map((m) => <li>{m}</li>)}
+              </ul>
+              <div class="dir__actions">
+                <a class="call-pill call-pill--ghost" href={call.href}>
+                  Подзвонити <span class="num">{call.display}</span>
+                </a>
+                <FutureLink note="Розділ у розробці">Детальніше про напрямок</FutureLink>
+              </div>
+            </div>
+          </details>
+        );
+      })}
+    </div>
+  </div>
+</Section>
+
+<style>
+  :global(.dirs) { padding-bottom: var(--section-l); }
+  .dirs__head { display: grid; gap: var(--s-4); margin-bottom: var(--s-7); }
+  .dirs__intro { max-width: 40ch; }
+
+  .dirs__list { position: relative; border-top: 2px solid var(--color-text); }
+  .dir { border-bottom: var(--line) solid var(--color-border); }
+  .dir__summary {
+    position: relative;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--s-2) var(--s-5);
+    min-height: var(--tap-l); padding: var(--s-5) 0 var(--s-5) var(--s-5);
+    cursor: pointer; list-style: none;
+  }
+  .dir__summary::-webkit-details-marker { display: none; }
+  .dir__summary:focus-visible { outline-offset: calc(-1 * var(--ring)); }
+  .dir__ask, .dir__term { grid-column: 1; min-width: 0; transition: transform var(--dur-mid) var(--ease-out); }
+  .dir__ask { font-size: var(--fs-title); }
+  .dir__term { color: var(--color-text-muted); font-size: var(--fs-small); margin-top: calc(-1 * var(--s-1)); }
+  .dir__price { display: grid; justify-items: start; gap: 0; grid-column: 1; }
+  .dir__price-value { font-size: var(--fs-price-row); font-weight: 600; line-height: 1.2; white-space: nowrap; }
+  .dir__toggle {
+    grid-column: 2; grid-row: 1 / span 3; align-self: center;
+    width: var(--tap); height: var(--tap); border-radius: 50%;
+    box-shadow: inset 0 0 0 var(--line) var(--color-border);
+    background:
+      linear-gradient(var(--color-text), var(--color-text)) center / 14px 2px no-repeat,
+      linear-gradient(var(--color-text), var(--color-text)) center / 2px 14px no-repeat;
+    transition: transform var(--dur-mid) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+  }
+  .dir__summary:hover .dir__toggle { box-shadow: inset 0 0 0 2px var(--color-text); }
+  .dir__summary:active .dir__toggle { transform: scale(.94); }
+  .dir[open] .dir__toggle { transform: rotate(45deg); }
+
+  /* Fixation dot — without JS each open row marks itself; with JS one dot travels (scripts/directions.ts). */
+  .dir__summary::before {
+    content: ""; position: absolute; left: 0; top: 50%;
+    width: var(--dot); height: var(--dot); margin-top: calc(var(--dot) / -2); border-radius: 50%;
+    background: var(--color-accent); opacity: 0;
+  }
+  .dir[open] > .dir__summary::before { opacity: 1; }
+  .dirs__list.has-dot .dir__summary::before { display: none; }
+  .dirs__dot {
+    position: absolute; left: 0; top: 0; z-index: 1;
+    width: var(--dot); height: var(--dot); border-radius: 50%;
+    background: var(--color-accent);
+    opacity: 0; pointer-events: none;
+    transition: transform var(--dur-mid) var(--ease-out), opacity var(--dur-fast) var(--ease-out);
+  }
+  .dirs__list:not(.has-dot) .dirs__dot { display: none; }
+  .dirs__dot.is-shown { opacity: 1; }
+  .dir.is-active .dir__ask, .dir.is-active .dir__term { transform: translateX(6px); }
+
+  .dir__body { padding: 0 0 var(--s-6) var(--s-5); display: grid; gap: var(--s-5); }
+  .dir__methods { display: grid; gap: var(--s-2); max-width: var(--measure); }
+  .dir__methods li { padding-left: var(--s-5); position: relative; }
+  .dir__methods li::before { content: ""; position: absolute; left: 0; top: 0.8em; width: var(--s-3); height: var(--line); background: var(--color-text-muted); }
+  .dir__actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3) var(--s-6); }
+  .dir[open] .dir__body { animation: dir-open var(--dur-fast) var(--ease-out); }
+  @keyframes dir-open { from { opacity: 0; } to { opacity: 1; } }
+
+  @media (min-width: 768px) {
+    .dirs__head { grid-template-columns: repeat(8, minmax(0, 1fr)); column-gap: var(--gutter); align-items: end; }
+    .dirs__head h2 { grid-column: 1 / 5; text-wrap: balance; }
+    .dirs__intro { grid-column: 5 / -1; }
+    .dir__summary { grid-template-columns: minmax(0, 1fr) minmax(0, 13rem) auto; padding-block: var(--s-6); }
+    .dir__price { grid-column: 2; grid-row: 1 / span 2; justify-items: end; text-align: right; }
+    .dir__toggle { grid-column: 3; grid-row: 1 / span 2; }
+    .dir__body { padding-right: calc(13rem + var(--tap) + 2 * var(--s-5)); }
+  }
+  @media (min-width: 1280px) {
+    .dirs__head { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+    .dirs__head h2 { grid-column: 1 / 7; text-wrap: balance; }
+    .dirs__intro { grid-column: 8 / -1; }
+    .dir__summary { grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 2fr) auto; padding-left: var(--s-7); }
+    .dir__ask { grid-column: 1; grid-row: 1; }
+    .dir__term { grid-column: 2; grid-row: 1; font-size: var(--fs-body); margin-top: 0; }
+    .dir__price { grid-column: 3; grid-row: 1; }
+    .dir__toggle { grid-column: 4; grid-row: 1; }
+    .dir__body { padding-left: var(--s-7); padding-right: 0; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); column-gap: var(--s-5); align-items: start; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .dir.is-active .dir__ask, .dir.is-active .dir__term { transform: none; }
+  }
+</style>
